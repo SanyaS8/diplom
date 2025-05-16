@@ -1,0 +1,376 @@
+api/list_of_cities/
+Описание: Возвращает список городов.
+Метод: GET
+Входные данные: Нет.
+Выходные данные: JSON-массив объектов с полями:
+  - name (string): Название города.
+  - country (string): Страна, к которой относится город.
+Пример успешного ответа:
+[
+    {"name": "Москва", "country": "Россия"},
+    {"name": "Берлин", "country": "Германия"}
+]
+Возможные ошибки:
+  - 500: {"error": "Internal server error"}
+
+api/search_trips/
+Описание: Поиск рейсов между двумя городами.
+Метод: GET
+Входные данные: Параметры запроса:
+  - city1_name (string): Название города отправления.
+  - country1_name (string): Страна города отправления.
+  - city2_name (string): Название города прибытия.
+  - country2_name (string): Страна города прибытия.
+Выходные данные: JSON-массив объектов с информацией о рейсах:
+  - trip_id (int): Идентификатор рейса.
+  - departure_time (string): Время отправления.
+  - arrival_time (string): Время прибытия.
+  - distance_km (float): Расстояние в километрах.
+  - base_price (float): Базовая стоимость билета.
+  - status (string): Статус рейса (например, "active").
+  - departure_city (string): Город отправления.
+  - arrival_city (string): Город прибытия.
+  - total_seats (int): Общее количество мест.
+  - available_seats (int): Количество доступных мест.
+  - model (string): Модель транспортного средства.
+  - vehicle_number (string): Номер транспортного средства.
+  - type (string): Тип транспортного средства (например, "Bus").
+Пример успешного ответа:
+[
+    {
+        "trip_id": 1,
+        "departure_time": "2025-05-13T08:00:00",
+        "arrival_time": "2025-05-13T12:00:00",
+        "distance_km": 300.00,
+        "base_price": 50.00,
+        "status": "active",
+        "departure_city": "Москва",
+        "arrival_city": "Санкт-Петербург",
+        "total_seats": 50,
+        "available_seats": 20,
+        "model": "Mercedes Sprinter",
+        "vehicle_number": "AB123CD",
+        "type": "Bus"
+    }
+]
+Возможные ошибки:
+  - 400: {"error": "All parameters (city1_name, country1_name, city2_name, country2_name) are required."}
+  - 500: {"error": "Internal server error"}
+
+api/login/
+Описание: Авторизация пользователя.
+Метод: POST
+Входные данные: JSON с полями:
+  - username (string): Имя пользователя или email.
+  - password (string): Пароль пользователя.
+Выходные данные: JSON с сообщением об успешной авторизации и токеном.
+Пример успешного ответа:
+{
+    "message": "Login successful",
+    "Authorization": "Bearer <токен>"
+}
+Возможные ошибки:
+  - 400: {"error": "Username and password are required"}
+  - 401: {"error": "Invalid username or password"}
+  - 405: {"error": "Only POST method is allowed"}
+  - 500: {"error": "Internal server error"}
+
+api/register/
+Описание: Регистрация нового пользователя.
+Метод: POST
+Входные данные: JSON с полями:
+  - username (string): Имя пользователя.
+  - password (string): Пароль пользователя.
+  - email (string): Email пользователя.
+Выходные данные: JSON с сообщением об успешной регистрации.
+Пример успешного ответа:
+{
+    "message": "User registered successfully"
+}
+Возможные ошибки:
+  - 400: {"error": "Email and password are required"}
+  - 400: {"error": "Email already in use"}
+  - 405: {"error": "Only POST method is allowed"}
+  - 500: {"error": "Internal server error"}
+
+api/exit/
+Описание: Завершение сессии пользователя.
+Метод: GET
+Входные данные: Нет.
+Выходные данные: JSON с сообщением об успешном выходе.
+Пример успешного ответа:
+{
+    "message": "Logout successful"
+}
+Возможные ошибки:
+  - 500: {"error": "Internal server error"}
+
+api/user/add_profile/
+Описание: Добавление нового профиля пользователя.
+Метод: POST
+Входные данные: JSON с полями:
+  - first_name (string): Имя пользователя.
+  - last_name (string): Фамилия пользователя.
+  - phone (string): Номер телефона.
+  - birth_date (string): Дата рождения.
+  - passport_series (string): Серия паспорта.
+  - passport_number (string): Номер паспорта.
+Выходные данные: JSON с сообщением об успешном создании профиля.
+Пример успешного ответа:
+{
+    "message": "Profile created successfully"
+}
+Возможные ошибки:
+  - 400: {"error": "User does not exist"}
+  - 500: {"error": "Internal server error"}
+
+api/user/delete_profile/
+Описание: Удаление профиля пользователя.
+Метод: DELETE
+Входные данные: JSON с полями:
+  - profile_id (int): Идентификатор профиля.
+Выходные данные: JSON с сообщением об успешном удалении профиля.
+Пример успешного ответа:
+{
+    "message": "Profile deleted successfully"
+}
+Возможные ошибки:
+  - 404: {"error": "Profile does not exist or does not belong to the user"}
+  - 500: {"error": "Internal server error"}
+
+api/user/my_profile/
+Описание: Получение информации о профилях пользователя.
+Метод: GET
+Входные данные: Нет.
+Выходные данные: JSON с информацией о профилях пользователя.
+Пример успешного ответа:
+{
+    "profiles": [
+        {
+            "profile_id": 1,
+            "first_name": "Иван",
+            "last_name": "Иванов",
+            "phone": "+79991234567",
+            "birth_date": "1990-01-01",
+            "passport_series": "1234",
+            "passport_number": "567890"
+        }
+    ]
+}
+Возможные ошибки:
+  - 404: {"error": "No profiles found for the user"}
+  - 500: {"error": "Internal server error"}
+
+api/user/my_tickets/
+Описание: Получение списка билетов пользователя.
+Метод: GET
+Входные данные: Нет.
+Выходные данные: JSON с информацией о билетах пользователя.
+Пример успешного ответа:
+{
+    "tickets": [
+        {
+            "ticket_id": 1,
+            "departure_time": "2025-05-13T08:00:00",
+            "arrival_time": "2025-05-13T12:00:00",
+            "departure_city": "Москва",
+            "arrival_city": "Санкт-Петербург",
+            "seat_number": 12
+        }
+    ]
+}
+Возможные ошибки:
+  - 400: {"error": "User ID is required"}
+  - 500: {"error": "Internal server error"}
+
+api/user/add_ticket/
+Описание: Добавление билета для пользователя.
+Метод: POST
+Входные данные: JSON с полями:
+  - trip_id (int): Идентификатор рейса.
+  - profile_id (int): Идентификатор профиля.
+Выходные данные: JSON с сообщением об успешном добавлении билета.
+Пример успешного ответа:
+{
+    "message": "Ticket added successfully",
+    "ticket": {
+        "ticket_id": 1,
+        "trip_id": 10,
+        "profile_id": 5
+    }
+}
+Возможные ошибки:
+  - 400: {"error": "trip_id and profile_id are required"}
+  - 500: {"error": "Internal server error"}
+
+api/admin/list_of_users/
+Описание: Получение списка всех пользователей.
+Метод: GET
+Входные данные: Нет.
+Выходные данные: JSON с информацией о пользователях.
+Пример успешного ответа:
+{
+    "users": [
+        {
+            "user_id": 1,
+            "email": "user@example.com",
+            "created_at": "2025-05-13T08:00:00"
+        }
+    ]
+}
+Возможные ошибки:
+  - 500: {"error": "Internal server error"}
+
+api/admin/list_of_carriers/
+Описание: Получение списка всех перевозчиков.
+Метод: GET
+Входные данные: Нет.
+Выходные данные: JSON с информацией о перевозчиках.
+Пример успешного ответа:
+{
+    "carriers": [
+        {
+            "carrier_id": 1,
+            "name": "CarrierName",
+            "email": "carrier@example.com",
+            "phone": "+79991234567"
+        }
+    ]
+}
+Возможные ошибки:
+  - 500: {"error": "Internal server error"}
+
+api/admin/create_carrier/
+Описание: Создание нового перевозчика.
+Метод: POST
+Входные данные: JSON с полями:
+  - name (string): Имя перевозчика.
+  - email (string): Email перевозчика.
+  - password (string): Пароль перевозчика.
+Выходные данные: JSON с сообщением об успешном создании перевозчика.
+Пример успешного ответа:
+{
+    "message": "Carrier created successfully",
+    "carrier_id": 1
+}
+Возможные ошибки:
+  - 400: {"error": "name, email, and password are required"}
+  - 500: {"error": "Internal server error"}
+
+api/admin/delete_user/
+Описание: Удаление пользователя.
+Метод: DELETE
+Входные данные: JSON с полями:
+  - user_id (int): Идентификатор пользователя.
+Выходные данные: JSON с сообщением об успешном удалении пользователя.
+Пример успешного ответа:
+{
+    "message": "User deleted successfully"
+}
+Возможные ошибки:
+  - 400: {"error": "user_id is required"}
+  - 404: {"error": "User does not exist"}
+  - 500: {"error": "Internal server error"}
+
+api/admin/delete_carrier/
+Описание: Удаление перевозчика.
+Метод: DELETE
+Входные данные: JSON с полями:
+  - carrier_id (int): Идентификатор перевозчика.
+Выходные данные: JSON с сообщением об успешном удалении перевозчика.
+Пример успешного ответа:
+{
+    "message": "Carrier deleted successfully"
+}
+Возможные ошибки:
+  - 400: {"error": "carrier_id is required"}
+  - 404: {"error": "Carrier does not exist"}
+  - 500: {"error": "Internal server error"}
+
+api/admin/delete_trip/
+Описание: Удаление рейса.
+Метод: DELETE
+Входные данные: JSON с полями:
+  - trip_id (int): Идентификатор рейса.
+Выходные данные: JSON с сообщением об успешном удалении рейса.
+Пример успешного ответа:
+{
+    "message": "Trip deleted successfully"
+}
+Возможные ошибки:
+  - 400: {"error": "trip_id is required"}
+  - 404: {"error": "Trip does not exist"}
+  - 500: {"error": "Internal server error"}
+
+api/carrier/add_trip/
+Описание: Добавление нового рейса.
+Метод: POST
+Входные данные: JSON с полями:
+  - departure_city_id (int): Идентификатор города отправления.
+  - arrival_city_id (int): Идентификатор города прибытия.
+  - vehicle_type (string): Тип транспортного средства.
+  - vehicle_model (string): Модель транспортного средства.
+  - total_seats (int): Общее количество мест.
+  - vehicle_number (string): Номер транспортного средства.
+  - departure_time (string): Время отправления.
+  - arrival_time (string): Время прибытия.
+  - base_price (float): Базовая стоимость билета.
+  - distance_km (float): Расстояние в километрах.
+  - trip_number (string): Номер рейса.
+Выходные данные: JSON с сообщением об успешном добавлении рейса.
+Пример успешного ответа:
+{
+    "message": "Trip created successfully",
+    "trip_id": 1
+}
+Возможные ошибки:
+  - 400: {"error": "Field <field_name> is required"}
+  - 500: {"error": "Internal server error"}
+
+api/carrier/update_trip/
+Описание: Обновление информации о рейсе.
+Метод: PATCH
+Входные данные: JSON с полями:
+  - trip_id (int): Идентификатор рейса.
+  - departure_time (string): Время отправления.
+  - arrival_time (string): Время прибытия.
+  - trip_number (string): Номер рейса.
+Выходные данные: JSON с сообщением об успешном обновлении рейса.
+Пример успешного ответа:
+{
+    "message": "Trip updated successfully"
+}
+Возможные ошибки:
+  - 400: {"error": "Field trip_id is required"}
+  - 404: {"error": "Trip not found or you do not have permission to modify it"}
+  - 500: {"error": "Internal server error"}
+
+api/carrier/cancel_trip/
+Описание: Отмена рейса.
+Метод: PATCH
+Входные данные: JSON с полями:
+  - trip_id (int): Идентификатор рейса.
+Выходные данные: JSON с сообщением об успешной отмене рейса.
+Пример успешного ответа:
+{
+    "message": "Trip cancelled successfully"
+}
+Возможные ошибки:
+  - 400: {"error": "Field trip_id is required"}
+  - 404: {"error": "Trip not found or you do not have permission to modify it"}
+  - 500: {"error": "Internal server error"}
+
+api/carrier/delete_trip/
+Описание: Удаление рейса.
+Метод: DELETE
+Входные данные: JSON с полями:
+  - trip_id (int): Идентификатор рейса.
+Выходные данные: JSON с сообщением об успешном удалении рейса.
+Пример успешного ответа:
+{
+    "message": "Trip deleted successfully"
+}
+Возможные ошибки:
+  - 400: {"error": "Field trip_id is required"}
+  - 404: {"error": "Trip not found or you do not have permission to modify it"}
+  - 500: {"error": "Internal server error"}
