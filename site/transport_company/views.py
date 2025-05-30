@@ -137,3 +137,52 @@ def register_user(request):
 
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+# Добавление новых API для поиска рейсов
+@csrf_exempt
+@permission_classes([IsGuest])
+def search_trips_all(request):
+    return search_trips_by_type(request, None)
+
+@csrf_exempt
+@permission_classes([IsGuest])
+def search_trips_airplane(request):
+    return search_trips_by_type(request, 'airplane')
+
+@csrf_exempt
+@permission_classes([IsGuest])
+def search_trips_train(request):
+    return search_trips_by_type(request, 'train')
+
+@csrf_exempt
+@permission_classes([IsGuest])
+def search_trips_bus(request):
+    return search_trips_by_type(request, 'bus')
+
+# Общая функция для фильтрации по типу транспорта
+def search_trips_by_type(request, vehicle_type):
+    city1_name = request.GET.get('city1_name')
+    country1_name = request.GET.get('country1_name')
+    city2_name = request.GET.get('city2_name')
+    country2_name = request.GET.get('country2_name')
+    departure_date = request.GET.get('departure_date')
+
+    if not all([city1_name, country1_name, city2_name, country2_name, departure_date]):
+        return JsonResponse({'error': 'All parameters (city1_name, country1_name, city2_name, country2_name, departure_date) are required.'}, status=400)
+
+    with connection.cursor() as cursor:
+        query = """
+            SELECT * FROM transport_company.search_trips_by_cities(%s, %s, %s, %s)
+            WHERE DATE(departure_time) = %s
+        """
+        params = [city1_name, country1_name, city2_name, country2_name, departure_date]
+
+        if vehicle_type:
+            query += " AND type = %s"
+            params.append(vehicle_type)
+
+        cursor.execute(query, params)
+        columns = [col[0] for col in cursor.description]
+        results = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    return JsonResponse(results, safe=False)
