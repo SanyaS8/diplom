@@ -138,7 +138,6 @@ def register_user(request):
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-# Добавление новых API для поиска рейсов
 @csrf_exempt
 @permission_classes([IsGuest])
 def search_trips_all(request):
