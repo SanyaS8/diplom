@@ -11,21 +11,29 @@ const profile = ref({
   series: null,
   number: null
 });
+
+const profiles = ref([
+  { id: 1, name: "Иванов Иван Иванович", phone: "+375 29 123-45-67", birthDate: "10.10.1990" },
+  { id: 2, name: "Петров Петр Петрович", phone: "+375 29 234-56-78", birthDate: "15.05.1985" },
+  { id: 3, name: "Сидоров Сидор Сидорович", phone: "+375 29 345-67-89", birthDate: "20.08.1978" },
+  { id: 4, name: "Смирнов Сергей Сергеевич", phone: "+375 29 456-78-90", birthDate: "25.12.1992" },
+  { id: 5, name: "Васильев Василий Васильевич", phone: "+375 29 567-89-01", birthDate: "05.07.1980" }
+]);
 </script>
 
 <template>
   <div class="profile-tickets">
     <profile-title>Ваши профили</profile-title>
     <div class="profiles-cards">
-      <Card style="width: 30rem; overflow: hidden" v-for="i in 5" :key="i">
+      <Card style="width: 30rem; overflow: hidden" v-for="profile in profiles" :key="profile.id">
         <template #title>
           <i class="ri-profile-line"></i>
-          Профиль {{ i }}
+          Профиль {{ profile.id }}
         </template>
-        <template #subtitle>+7 913 232 23 10</template>
+        <template #subtitle>{{ profile.phone }}</template>
         <template #content>
-          Иванов Иван Иванович<br>
-          10.10.1910<br>
+          {{ profile.name }}<br>
+          {{ profile.birthDate }}<br>
           <div class="passport">
             <span>Изменить</span>
             <span>Удалить</span>
